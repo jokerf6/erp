@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  email         String     @unique
+  password      String
+  name          String
+  first         Boolean    @default(true)
+  active        Boolean    @default(true)
+  // relation with position
+  jobPosition   Position   @relation(fields: [jobPositionId], references: [id])
+  jobPositionId String
+  // relation with department
+  department    Department @relation(fields: [departmentId], references: [id])
+  departmentId  String
+  Token         Token[]
+}
+
+model Position {
+  id   String @id @default(uuid())
+  name String
+  User User[]
+}
+
+model Department {
+  id    String @id @default(uuid())
+  name  String
+  photo String
+  User  User[]
+}
+
+model Token {
+  id           String    @id @default(uuid())
+  type         TokenType
+  // relation with user
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String
+  // relation with each other
+  refreshId    String?   @unique
+  refreshToken Token?    @relation("AccesHasRefresh", fields: [refreshId], references: [id])
+  updatedAt    DateTime  @default(now()) @updatedAt
+  accessToken  Token?    @relation("AccesHasRefresh")
+  createdAt    DateTime  @default(now())
+  // to check if token is valid
+  valid        Boolean   @default(true)
+}
+
+enum TokenType {
+  RefreshToken
+  AccessToken
+}
