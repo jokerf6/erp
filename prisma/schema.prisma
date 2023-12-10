@@ -24,6 +24,7 @@ model User {
   department    Department @relation(fields: [departmentId], references: [id])
   departmentId  String
   Token         Token[]
+  secret        secret?
 }
 
 model Position {
@@ -58,4 +59,17 @@ model Token {
 enum TokenType {
   RefreshToken
   AccessToken
+}
+
+model secret {
+  userId    String     @unique
+  code      String
+  type      secretType @default(EMAIL_VERIFICATION)
+  user      User       @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
+}
+
+enum secretType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
 }

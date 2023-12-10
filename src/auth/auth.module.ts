@@ -5,6 +5,7 @@ import { PrismaService } from "../../prisma.service";
 import { tokenService } from "./token.service";
 import { JwtModule } from "@nestjs/jwt";
 import { jwtStrategy, refreshJwtStrategy } from "./stratiges/jwt.stratgy";
+import { MailService } from "src/mail/mail.service";
 
 @Module({
   controllers: [AuthController],
@@ -19,6 +20,7 @@ import { jwtStrategy, refreshJwtStrategy } from "./stratiges/jwt.stratgy";
     PrismaService,
     tokenService,
     jwtStrategy,
+    MailService,
     refreshJwtStrategy,
   ],
 })

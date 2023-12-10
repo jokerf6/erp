@@ -7,6 +7,8 @@ import { ResponseController } from "src/util/response.controller";
 import { tokenService } from "./token.service";
 import { refreshJwtStrategy } from "./stratiges/jwt.stratgy";
 import { ApiTags } from "@nestjs/swagger";
+import * as speakeasy from "speakeasy";
+import { MailService } from "src/mail/mail.service";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +16,8 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private tokenServices: tokenService,
-    private refresh: refreshJwtStrategy
+    private refresh: refreshJwtStrategy,
+    private mail: MailService
   ) {}
 
   // Login user
@@ -73,6 +76,26 @@ export class AuthService {
 
     // retuen data to front if user first time to change password
     if (userRes["first"]) {
+      const secret = speakeasy.generateSecret().base32;
+
+      const code = speakeasy.totp({
+        secret:secret,
+        digits: 5,
+        encoding: "base32",
+        step: 300,
+      });
+      await this.mail.sendUserConfirmation(
+        userRes["name"],
+        userRes["email"],
+        code.toString(),
+        "confirmation"
+      );
+      await this.prisma.secret.create({
+        data: {
+          userId: userRes["id"],
+          code: code.toString(),
+        }, 
+      });
       return ResponseController.success(res, "signed In successfully", {
         user: userRes["id"],
       });

@@ -63,7 +63,7 @@ export class AuthController {
     return this.authService.refreshToken(req, res, query);
   }
 
-  // password Dsammy
+  // password Dammy
   @Get("/getPassword")
   getPassword(@Res() res: Response) {
     return this.authService.getPassword(res);
