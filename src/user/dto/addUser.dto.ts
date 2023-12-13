@@ -6,4 +6,7 @@ export class AddUser {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  name: string;
 }
