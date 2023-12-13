@@ -13,13 +13,34 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { ChangePassword } from "./dto/changePassword.dto";
 import { Response } from "express";
 import { ForgetPassword } from "./dto/forgetPassword.dto";
-
+import { Verify } from "./dto/verifyCode.dto";
+import { AddUser } from "./dto/addUser.dto";
 @Controller("user")
 @ApiTags("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  // change password of user
 
+  // add user
+  @Post("/")
+  addUser(
+    @Res() res: Response,
+    @Body(ValidationPipe)
+    addUser: AddUser
+  ) {
+    return this.userService.addUser(res, addUser);
+  }
+
+  // send email to change password
+  @Post("/forget_password")
+  forgetPassword(
+    @Res() res: Response,
+    @Body(ValidationPipe)
+    forgetPassword: ForgetPassword
+  ) {
+    return this.userService.forgetPassword(res, forgetPassword);
+  }
+
+  // change password of user
   @Post("/:id/change_password")
   editPassword(
     @Param("id") id: string,
@@ -29,14 +50,15 @@ export class UserController {
   ) {
     return this.userService.changePassword(res, id, changePassword);
   }
-  // send email to change password
 
-  @Post("/forget_password")
-  forgetPassword(
+  // verify code
+  @Post("/:id/verify_code")
+  verifyCode(
     @Res() res: Response,
+    @Param("id") id: string,
     @Body(ValidationPipe)
-    forgetPassword: ForgetPassword
+    verify: Verify
   ) {
-    return this.userService.forgetPassword(res, forgetPassword);
+    return this.userService.verify(res, id, verify);
   }
 }

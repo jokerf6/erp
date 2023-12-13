@@ -18,7 +18,7 @@ export class UserService {
   ) {}
   // change password of user if he login for first time or not
   async changePassword(res, id, changePassword) {
-    const { password, otp } = changePassword;
+    const { password } = changePassword;
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -57,6 +57,24 @@ export class UserService {
         password: hashPassword,
         first: false,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        first: true,
+        jobPosition: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       where: {
         id,
       },
@@ -90,7 +108,7 @@ export class UserService {
   }
   // change Password for users not first time
   async notFirstUser(hashPassword, id, res) {
-   await this.prisma.user.update({
+    await this.prisma.user.update({
       data: {
         password: hashPassword,
       },
@@ -104,6 +122,8 @@ export class UserService {
       null
     );
   }
+
+  // take email to send id
   async forgetPassword(res, forgetPassword) {
     const { email } = forgetPassword;
     const user = await this.prisma.user.findFirst({
@@ -123,13 +143,13 @@ export class UserService {
     if (!user) {
       return ResponseController.badRequest(
         res,
-        "email not found",
+        "Email not found",
         "email not found"
       );
     }
     // if user first time
 
-    if (user["first"] || user["active"]) {
+    if (user["first"] || !user["active"]) {
       return ResponseController.forbidden(res, "connect to admin please");
     }
 
@@ -155,7 +175,48 @@ export class UserService {
       },
     });
     return ResponseController.success(res, "signed In successfully", {
-      user: user["id"],
+      user: { id: user["id"], email: user["email"] },
     });
+  }
+
+  //verify code
+  async verify(res, id, verifyDto) {
+    const { code } = verifyDto;
+    const exist = await this.prisma.secret.findUnique({
+      where: {
+        userId: id,
+      },
+    });
+    if (!exist) {
+      return ResponseController.notFound(
+        res,
+        "user not available to change password"
+      );
+    }
+
+    if (exist.code !== code) {
+      return ResponseController.badRequest(res, "Invalid Code", "Invalid Code");
+    }
+
+    await this.prisma.secret.deleteMany({
+      where: {
+        userId: id,
+      },
+    });
+    return ResponseController.success(res, "Email Verified Successfully", id);
+  }
+  async addUser(res, data) {
+    const { email, name } = data;
+    const hashPassword = await bcrypt.hash("password", 8);
+    await this.prisma.user.create({
+      data: {
+        email,
+        password: hashPassword,
+        name,
+        departmentId: "031a913f-904f-11ee-84d9-005056c00001",
+        jobPositionId: "badf9285-904e-11ee-84d9-005056c00001",
+      },
+    });
+    return ResponseController.success(res, "add User successfuly", null);
   }
 }
