@@ -3,13 +3,12 @@ import { SignIn } from "./dto/signIn.dto";
 import { PrismaService } from "../../prisma.service";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
-import { ResponseController } from "src/util/response.controller";
 import { tokenService } from "./token.service";
 import { refreshJwtStrategy } from "./stratiges/jwt.stratgy";
 import { ApiTags } from "@nestjs/swagger";
 import * as speakeasy from "speakeasy";
-import { MailService } from "src/mail/mail.service";
-
+import { ResponseController } from "../../src/util/response.controller";
+import { MailService } from "../../src/mail/mail.service";
 @Injectable()
 export class AuthService {
   ResponseService: any;

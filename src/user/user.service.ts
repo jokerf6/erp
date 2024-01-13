@@ -208,7 +208,7 @@ export class UserService {
   async addUser(res, data) {
     const { email, name } = data;
     const hashPassword = await bcrypt.hash("password", 8);
-    await this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         email,
         password: hashPassword,
@@ -217,6 +217,6 @@ export class UserService {
         jobPositionId: "badf9285-904e-11ee-84d9-005056c00001",
       },
     });
-    return ResponseController.success(res, "add User successfuly", null);
+    return ResponseController.success(res, "add User successfuly", user);
   }
 }
