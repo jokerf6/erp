@@ -38,13 +38,13 @@ export class TasksController {
 
   @Auth({})
   @Get("/")
-  getTasks(@Res() res: Response, @CurrentUser("id") userId: string) {
+  getTasks(@Res() res: any, @CurrentUser("id") userId: string) {
     return this.tasksService.getTasks(res, userId);
   }
   @Auth({})
   @Post("/")
   addTask(
-    @Res() res: Response,
+    @Res() res: any,
     @Body() addTask: AddTask,
     @RolesGuard(features.ADD_TASKS) {},
     @CurrentUser("id") userId: string
@@ -71,7 +71,7 @@ export class TasksController {
   @Patch("/:id")
   @ApiRequiredIdParam()
   editTask(
-    @Res() res: Response,
+    @Res() res: any,
     @Body() addTask: AddTask,
     @Param() { id }: RequiredIdParam,
 
@@ -90,7 +90,7 @@ export class TasksController {
     enum: taskStatus,
   })
   editTaskStatus(
-    @Res() res: Response,
+    @Res() res: any,
     @Param() { id }: RequiredIdParam,
     @CurrentUser("id") userId: string,
     @Query("status") status: Status // Extract the 'status' query parameter
@@ -104,7 +104,7 @@ export class TasksController {
   @Delete("/:id")
   @ApiRequiredIdParam()
   deleteTask(
-    @Res() res: Response,
+    @Res() res: any,
     @Param() { id }: RequiredIdParam,
     @RolesGuard(features.DELETE_TASKS) {}
   ) {
@@ -117,7 +117,7 @@ export class TasksController {
   @Get("/:id")
   @ApiRequiredIdParam()
   getTask(
-    @Res() res: Response,
+    @Res() res: any,
     @CurrentUser("id") userId: string,
     @Param() { id }: RequiredIdParam
   ) {
@@ -130,7 +130,7 @@ export class TasksController {
   @Post("/:id/comment")
   @ApiRequiredIdParam()
   addComment(
-    @Res() res: Response,
+    @Res() res: any,
     @CurrentUser("id") userId: string,
     @Body() addComment: AddComment,
     @Param() { id }: RequiredIdParam
@@ -144,7 +144,7 @@ export class TasksController {
   @Delete("/comment/:id")
   @ApiRequiredIdParam()
   deleteComment(
-    @Res() res: Response,
+    @Res() res: any,
     @CurrentUser("id") userId: string,
     @Param() { id }: RequiredIdParam
   ) {
