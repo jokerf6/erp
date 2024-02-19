@@ -9,7 +9,6 @@ import { TasksModule } from "./tasks/tasks.module";
 import { ProjectsModule } from "./projects/projects.module";
 import { ConfigModule } from "@nestjs/config";
 import { MediaModule } from "./media/media.module";
-import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { RolesModule } from './roles/roles.module';
     ConfigModule.forRoot({
       envFilePath: ".env", // Specify the path to your .env file
     }),
-    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
