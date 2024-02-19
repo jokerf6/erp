@@ -6,15 +6,21 @@ import {
   UseGuards,
   ValidationPipe,
   Param,
+  Get,
+  Query,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { ChangePassword } from "./dto/changePassword.dto";
 import { Response } from "express";
 import { ForgetPassword } from "./dto/forgetPassword.dto";
 import { Verify } from "./dto/verifyCode.dto";
 import { AddUser } from "./dto/addUser.dto";
+import { Auth } from "src/auth/decorators/auth.decorator";
+import { CurrentUser } from "src/auth/decorators/current-user.decorator";
+import { RolesGuard } from "src/auth/decorators/roles.decorator";
+import { features } from "@prisma/client";
 @Controller("user")
 @ApiTags("user")
 export class UserController {
@@ -29,7 +35,16 @@ export class UserController {
   ) {
     return this.userService.addUser(res, addUser);
   }
-
+  // get all Users
+  @Auth({})
+  @Get("/users")
+  getUsers(
+    @Res() res: Response,
+    @CurrentUser("departmentId") departmentId: string,
+    @RolesGuard(features.GET_USERS) roles: any
+  ) {
+    return this.userService.getUsers(res, departmentId);
+  }
   // send email to change password
   @Post("/forget_password")
   forgetPassword(

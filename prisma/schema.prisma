@@ -11,33 +11,50 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
+  id            String          @id @default(uuid())
+  email         String          @unique
   password      String
   name          String
-  first         Boolean    @default(true)
-  active        Boolean    @default(true)
+  first         Boolean         @default(true)
+  active        Boolean         @default(true)
+  image         String          @default("default.png")
   // relation with position
-  jobPosition   Position   @relation(fields: [jobPositionId], references: [id])
+  jobPosition   Position        @relation(fields: [jobPositionId], references: [id], onDelete: Cascade)
   jobPositionId String
   // relation with department
-  department    Department @relation(fields: [departmentId], references: [id])
+  department    Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId  String
   Token         Token[]
   secret        secret?
+  TaskComments  TaskComments[]
+  taskAssignees taskAssignees[]
+}
+
+model Roles {
+  // relation with position
+  id String @id @default(uuid())
+
+  jobPosition   Position   @relation(fields: [jobPositionId], references: [id], onDelete: Cascade)
+  jobPositionId String
+  // relation with department
+  department    Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  departmentId  String
+  feature       features
 }
 
 model Position {
-  id   String @id @default(uuid())
-  name String
-  User User[]
+  id    String  @id @default(uuid())
+  name  String
+  User  User[]
+  Roles Roles[]
 }
 
 model Department {
-  id    String @id @default(uuid())
+  id    String  @id @default(uuid())
   name  String
   photo String
   User  User[]
+  Roles Roles[]
 }
 
 model Token {
@@ -69,7 +86,76 @@ model secret {
   createdAt DateTime   @default(now())
 }
 
+model Task {
+  id String @id @default(uuid())
+
+  name      String
+  brief     String     @db.Text
+  createdAt DateTime   @default(now())
+  dueDate   DateTime   @default(now())
+  status    taskStatus @default(ToDo)
+  priority  String
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  taskAssignees taskAssignees[]
+
+  TaskFiles    TaskFiles[]
+  TaskComments TaskComments[]
+}
+
+model taskAssignees {
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  task   Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+  admin  Boolean @default(false)
+
+  @@id([userId, taskId])
+}
+
+model TaskFiles {
+  id     String @id @default(uuid())
+  name   String
+  file   String @db.Text
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+}
+
+model TaskComments {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  text      String   @db.Text
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
+
+model Project {
+  id String @id @default(uuid())
+
+  name String
+  Task Task[]
+}
+
+enum taskStatus {
+  ToDo
+  InProgress
+  Done
+}
+
 enum secretType {
   EMAIL_VERIFICATION
   PASSWORD_RESET
+}
+
+enum features {
+  GET_USERS
+  ADD_TASKS
+  GET_TASKS
+  DELETE_TASKS
+  GET_PROJECTS
+  MEETINGS
+  ADD_PROJECTS
 }

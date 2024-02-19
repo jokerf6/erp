@@ -1,0 +1,23 @@
+{"meta":{"found":32,"returned":1,"limit":1,"page":1},
+"data":[{
+    "uuid":"aae252b7-d84a-4a04-bd2f-cff5ea7d23a3",
+    "title":"Saudi Cable says unable to publish Q2 financials on time",
+    "description":"Saudi Cable Co. announced its inability to disclose its preliminary financial results for Q2 2023 within the specified deadline.\r\n\r\n\r\n\r\nThe financials",
+    "keywords":"At Argaam Plus, you get up to date news on Saudi Stock Market tadawul, stock quotes, company performance, Market data and analysis. Top companies Sabic, Maaden, Banks, Petrochemicals",
+    "snippet":"Logo of Saudi Cable Co.\n\nSaudi Cable Co. announced its inability to disclose its preliminary financial results for Q2 2023 within the specified deadline.\n\nThe f...",
+    "url":"https:\/\/www.argaam.com\/en\/article\/articledetail\/id\/1705730",
+    "image_url":"https:\/\/argaamplus.s3.amazonaws.com\/17af2d6b-cd3e-4271-b79e-27969651e94b.png","language":"en","published_at":"2024-02-15T18:06:00.000000Z","source":"argaam.com",
+    "relevance_score":null,
+    "entities":[
+        {"symbol":"2110.SR",
+        "name":"Saudi Cable Company",
+        "exchange":null,
+        "exchange_long":null,
+        "country":"sa",
+        "type":"equity",
+        "industry":"N\/A",
+        "match_score":69.12137,
+        "sentiment_score":-0.2094
+        "highlights":[{"highlight":"Logo of <em>Saudi<\/em> <em>Cable<\/em> Co.\n\n<em>Saudi<\/em> <em>Cable<\/em> Co. announced its inability to disclose its preliminary financial results for Q2 2023 within the specified deadline.\n\nThe financials are expected to be posted on Feb. 21, 2024, according to a Tadawul statement.","sentiment":-0.4019,"highlighted_in":"main_text"}
+        ,{"highlight":"The <em>Saudi<\/em> <em>cable<\/em> producer exerts efforts to publish the delayed financials and ensures the stock resumes trading as soon as possible. CEO Nael Fayez earlier told Argaam that the company expects to announce its Q2 2023 financial statements on Feb. 15, after which it will announce the results of the third quarter.","sentiment":-0.2263,"highlighted_in":"main_text"},{"highlight":"<em>Saudi<\/em> <em>Cable<\/em> says unable to publish Q2 financials on time","sentiment":0,"highlighted_in":"title"}]}]
+        ,"similar":[]}]}

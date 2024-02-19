@@ -7,6 +7,7 @@ import { PrismaService } from "prisma.service";
 import { tokenService } from "../auth/token.service";
 import { MailService } from "src/mail/mail.service";
 import * as speakeasy from "speakeasy";
+import { features } from "@prisma/client";
 
 @Injectable()
 export class UserService {
@@ -205,6 +206,7 @@ export class UserService {
     });
     return ResponseController.success(res, "Email Verified Successfully", id);
   }
+
   async addUser(res, data) {
     const { email, name } = data;
     const hashPassword = await bcrypt.hash("password", 8);
@@ -217,6 +219,19 @@ export class UserService {
         jobPositionId: "badf9285-904e-11ee-84d9-005056c00001",
       },
     });
-    return ResponseController.success(res, "add User successfuly", user);
+    return ResponseController.success(res, "add User successfully", user);
+  }
+
+  async getUsers(res: any, departmentId: string) {
+    const users = await this.prisma.user.findMany({
+      where: {
+        departmentId,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return ResponseController.success(res, "get Data Successfully", users);
   }
 }

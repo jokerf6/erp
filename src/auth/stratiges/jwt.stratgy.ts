@@ -31,8 +31,18 @@ export class jwtStrategy extends PassportStrategy(Strategy, "jwt") {
         },
       });
       if (user) {
+        const roles = await this.prisma.roles.findMany({
+          where: {
+            jobPositionId: user.jobPositionId,
+            departmentId: user.departmentId,
+          },
+          select: {
+            feature: true,
+          },
+        });
         done(null, {
-          userObject: { ...user },
+          ...user,
+          roles: roles,
           jti: jti["id"],
           refresh: payload.refresh || false,
         });
@@ -76,8 +86,18 @@ export class refreshJwtStrategy extends PassportStrategy(
       });
 
       if (user) {
+        const roles = await this.prisma.roles.findMany({
+          where: {
+            jobPositionId: user.jobPositionId,
+            departmentId: user.departmentId,
+          },
+          select: {
+            feature: true,
+          },
+        });
         done(null, {
-          userObject: { ...user },
+          ...user,
+          roles: roles,
           jti: payload.jti,
           refresh: payload.refresh || false,
         });

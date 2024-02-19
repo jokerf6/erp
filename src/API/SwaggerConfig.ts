@@ -11,23 +11,19 @@ import { OkResponse } from "./responses/okResponse.response";
 export class SwaggerInit {
   static init(app: INestApplication) {
     const config = new DocumentBuilder()
-      .addBearerAuth(
-        {
-          type: "http",
-          scheme: "bearer",
-        },
-        "Access Token"
-      )
-      .addBearerAuth(
-        {
-          type: "http",
-          scheme: "bearer",
-        },
-        "Refresh Token"
-      )
       .setTitle("ERP")
       .setDescription("")
       .setVersion("1.0")
+      .setContact(
+        "Fahd Hakem",
+        "https://www.linkedin.com/in/fahd-hakem/",
+        "fhakem75@gmail.com"
+      )
+      .addBearerAuth({
+        type: "http",
+        scheme: "bearer",
+      })
+
       .build();
     const options: SwaggerDocumentOptions = {
       operationIdFactory: (controllerKey: string, methodKey: string) =>
