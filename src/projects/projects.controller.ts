@@ -15,7 +15,7 @@ export class ProjectsController {
   @Auth({})
   @Get("/")
   getProjects(
-    @Res() res: Response,
+    @Res() res: any,
     @CurrentUser("departmentId") departmentId: string,
     @RolesGuard(features.GET_PROJECTS) {}
   ) {
@@ -24,7 +24,7 @@ export class ProjectsController {
   @Auth({})
   @Post("/")
   addProject(
-    @Res() res: Response,
+    @Res() res: any,
     @Body() AddProject: addProject,
     @RolesGuard(features.ADD_PROJECTS) {}
   ) {
