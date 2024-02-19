@@ -9,7 +9,7 @@ export class ProjectsService {
 
   async getProjects(res: any, departmentId: string) {
     const projects = await this.prisma.project.findMany({ where: {} });
-    return ResponseController.success(res, "Get data Successfully", [projects]);
+    return ResponseController.success(res, "Get data Successfully", projects);
   }
   async AddProject(res: any, data: addProject) {
     await this.prisma.project.create({
